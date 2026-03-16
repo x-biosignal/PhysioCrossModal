@@ -1,0 +1,55 @@
+Package: PhysioCrossModal
+Title: Cross-Modal Coupling Analysis for PhysioExperiment Objects
+Version: 0.4.0
+Authors@R:
+    person(given = "Yusuke",
+           family = "Matsui",
+           role = c("aut", "cre"),
+           email = "mail.to.matsui@gmail.com")
+Author: Yusuke Matsui
+Maintainer: Yusuke Matsui <mail.to.matsui@gmail.com>
+Description: Provides cross-modal coupling, connectivity, and synchrony analysis
+    between physiological signals of different modalities (EEG, EMG, ECG, EDA,
+    MoCap, fNIRS, etc.). Introduces a MultiPhysioExperiment container class for
+    holding multiple PhysioExperiment objects at different sampling rates with
+    temporal alignment. Includes spectral coherence, phase synchrony (PLV, PLI,
+    wPLI), directed coupling (Granger causality), and time-domain coupling
+    (cross-correlation) methods.
+Depends:
+    R (>= 4.2),
+    PhysioCore
+Imports:
+    methods,
+    parallel,
+    SummarizedExperiment,
+    S4Vectors,
+    stats
+Suggests:
+    signal,
+    PhysioPreprocess,
+    testthat (>= 3.2.0),
+    ggplot2,
+    knitr,
+    rmarkdown
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr
+Collate:
+    'MultiPhysioExperiment-class.R'
+    'MultiPhysioExperiment-methods.R'
+    'utils-spectral.R'
+    'align-signals.R'
+    'coupling-spectral.R'
+    'coupling-phase.R'
+    'coupling-directed.R'
+    'coupling-timedom.R'
+    'coupling-wavelet.R'
+    'coupling-wrapper.R'
+    'coupling-matrix.R'
+    'stats-significance.R'
+    'benchmark-lodo.R'
+    'crossmodal-data.R'
+    'vis-coupling.R'
+    'zzz.R'
+RoxygenNote: 7.3.3

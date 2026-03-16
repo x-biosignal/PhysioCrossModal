@@ -1,0 +1,409 @@
+---
+title: "Cross-Modal Coupling Analysis with PhysioCrossModal"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cross-Modal Coupling Analysis with PhysioCrossModal}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Introduction
+
+**PhysioCrossModal** provides a comprehensive toolkit for analyzing coupling
+and synchrony between physiological signals from different modalities (e.g.,
+EEG, EMG, ECG, EDA, MoCap). It extends the PhysioCore ecosystem with:
+
+- The `MultiPhysioExperiment` container for multi-modal recordings at different
+  sampling rates
+- Spectral coherence (Welch and multitaper methods)
+- Phase synchrony measures (PLV, PLI, wPLI)
+- Directed coupling (Granger causality)
+- Time-domain coupling (cross-correlation, sliding-window)
+- Wavelet time-frequency coherence and PLV
+- Statistical significance testing via surrogates and bootstrap
+
+This vignette walks through a complete cross-modal coupling analysis workflow.
+
+## Creating Synthetic Data
+
+PhysioCrossModal includes three data generators for quick prototyping and
+testing. We start by creating a simulated EEG-EMG dataset with corticomuscular
+coherence (CMC) at 20 Hz.
+
+```{r create-data}
+library(PhysioCrossModal)
+
+# Simulate EEG (500 Hz) and EMG (1000 Hz) with CMC at 20 Hz
+data <- make_eeg_emg(
+  n_sec = 10,
+  n_eeg_ch = 3,
+  n_emg_ch = 2,
+  sr_eeg = 500,
+  sr_emg = 1000,
+  cmc_freq = 20
+)
+
+pe_eeg <- data$eeg
+pe_emg <- data$emg
+```
+
+## The MultiPhysioExperiment Container
+
+When you have signals from multiple modalities recorded simultaneously, the
+`MultiPhysioExperiment` class provides a unified container. Each modality is
+stored as a named `PhysioExperiment` with its own sampling rate.
+
+```{r create-mpe}
+# Wrap modalities into a MultiPhysioExperiment
+mpe <- MultiPhysioExperiment(EEG = pe_eeg, EMG = pe_emg)
+mpe
+
+# Inspect
+modalities(mpe)         # c("EEG", "EMG")
+samplingRates(mpe)      # EEG=500, EMG=1000
+nModalities(mpe)        # 2
+
+# Extract a single modality
+eeg <- mpe[["EEG"]]
+```
+
+### Signal Alignment
+
+When coupling functions receive signals at different sampling rates, they
+automatically resample to a common rate. You can also align signals explicitly:
+
+```{r alignment}
+# Align both modalities to the lowest sampling rate
+mpe_aligned <- alignSignals(EEG = pe_eeg, EMG = pe_emg,
+                             method = "lowest_rate")
+samplingRates(mpe_aligned)  # Both 500 Hz
+
+# Or resample a single PhysioExperiment
+pe_emg_500 <- alignToRate(pe_emg, target_rate = 500)
+```
+
+## Spectral Coherence
+
+Coherence measures the linear frequency-domain relationship between two
+signals. Values range from 0 (no linear relationship) to 1 (perfect linear
+relationship) at each frequency.
+
+### Welch-Method Coherence
+
+```{r coherence}
+# Coherence between first EEG and first EMG channels
+coh <- coherence(pe_eeg, pe_emg,
+                  channels_x = 1, channels_y = 1,
+                  nperseg = 256L)
+
+# Peak coherence and its frequency
+peak_idx <- which.max(coh$coherence)
+cat("Peak coherence:", round(coh$coherence[peak_idx], 3),
+    "at", round(coh$frequencies[peak_idx], 1), "Hz\n")
+cat("95% confidence limit:", round(coh$confidence_limit, 3), "\n")
+```
+
+```{r plot-coherence}
+# Visualize the coherence spectrum
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  plotCoherenceSpectrum(coh)
+}
+```
+
+### Multitaper Coherence
+
+For short signals or when frequency resolution is critical, multitaper
+estimation provides lower variance than Welch's method:
+
+```{r multitaper}
+mt_coh <- multitaperCoherence(pe_eeg, pe_emg,
+                               channels_x = 1, channels_y = 1,
+                               nw = 4, freq_range = c(1, 50))
+```
+
+### Cross-Spectral Density
+
+The cross-spectrum captures both magnitude and phase relationships:
+
+```{r cross-spectrum}
+csd <- crossSpectrum(pe_eeg, pe_emg,
+                      channels_x = 1, channels_y = 1,
+                      nperseg = 256L)
+# Phase relationship at 20 Hz
+idx_20 <- which.min(abs(csd$frequencies - 20))
+cat("Phase at 20 Hz:", round(csd$phase[idx_20], 3), "radians\n")
+```
+
+## Phase Synchrony
+
+Phase-based measures quantify the consistency of the phase relationship
+between signals, independent of amplitude.
+
+### Phase Locking Value (PLV)
+
+PLV measures phase consistency over time. It requires specifying a frequency
+band for bandpass filtering:
+
+```{r plv}
+plv_result <- phaseLockingValue(pe_eeg, pe_emg,
+                                 channels_x = 1, channels_y = 1,
+                                 freq_band = c(18, 22))
+cat("PLV:", round(plv_result$plv, 3), "\n")
+```
+
+### Phase Lag Index (PLI)
+
+PLI is insensitive to zero-lag (volume conduction) effects:
+
+```{r pli}
+pli_result <- phaseLagIndex(pe_eeg, pe_emg,
+                             channels_x = 1, channels_y = 1,
+                             freq_band = c(18, 22))
+cat("PLI:", round(pli_result$pli, 3), "\n")
+```
+
+### Weighted PLI (wPLI)
+
+wPLI reduces noise sensitivity by weighting phase differences by their
+cross-spectral magnitude:
+
+```{r wpli}
+wpli_result <- weightedPLI(pe_eeg, pe_emg,
+                            channels_x = 1, channels_y = 1,
+                            freq_band = c(18, 22))
+cat("wPLI:", round(wpli_result$wpli, 3), "\n")
+cat("Debiased wPLI:", round(wpli_result$wpli_debiased, 3), "\n")
+```
+
+## Directed Coupling: Granger Causality
+
+Granger causality tests whether one signal's past helps predict another
+signal beyond its own history, indicating directional information flow.
+
+```{r granger}
+# Create directed signals: x drives y with a 10-sample lag
+dir_data <- make_directed_signals(n = 5000, sr = 500,
+                                   lag_samples = 10, coupling = 0.7)
+
+gc <- grangerCausality(dir_data$x, dir_data$y, sr = 500, order = 15)
+cat("GC x->y:", round(gc$gc_xy, 4), "\n")
+cat("GC y->x:", round(gc$gc_yx, 4), "\n")
+cat("Net GC:",  round(gc$net_gc, 4), "(positive = x drives y)\n")
+```
+
+## Time-Domain Coupling
+
+### Cross-Correlation
+
+Cross-correlation identifies time delays between signals:
+
+```{r cross-correlation}
+cc <- crossCorrelation(dir_data$x, dir_data$y, sr = 500)
+cat("Peak lag:", cc$peak_lag, "samples",
+    "(", round(cc$peak_lag_seconds, 4), "s)\n")
+cat("Peak correlation:", round(cc$peak_correlation, 3), "\n")
+```
+
+### Sliding-Window Cross-Correlation
+
+Track how coupling varies over time:
+
+```{r sliding-xcorr}
+sliding <- slidingCrossCorrelation(dir_data$x, dir_data$y, sr = 500,
+                                    window_sec = 2, step_sec = 0.5)
+
+# Visualize time course
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  plotCouplingTimecourse(sliding)
+}
+```
+
+## Wavelet Time-Frequency Analysis
+
+Wavelet methods reveal how coupling varies jointly in time and frequency.
+
+### Wavelet Coherence
+
+```{r wavelet-coherence}
+signals <- make_coupled_signals(sr1 = 200, sr2 = 200,
+                                 coupling_freq = 10, duration = 5)
+
+wcoh <- waveletCoherence(signals$x, signals$y, sr = 200,
+                          frequencies = seq(2, 30),
+                          n_cycles = 7)
+
+# Visualize time-frequency coherence
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  plotWaveletCoherence(wcoh)
+}
+```
+
+### Wavelet PLV
+
+```{r wavelet-plv}
+wplv <- waveletPLV(signals$x, signals$y, sr = 200,
+                    frequencies = seq(2, 30),
+                    n_cycles = 7)
+
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  plotWaveletCoherence(wplv)  # auto-detects PLV vs coherence
+}
+```
+
+## Unified Interface: couplingAnalysis()
+
+The `couplingAnalysis()` wrapper dispatches to any coupling method with a
+uniform API:
+
+```{r coupling-analysis}
+# Same call structure for any method
+res_coh <- couplingAnalysis(pe_eeg, pe_emg,
+                             method = "coherence",
+                             channels_x = 1, channels_y = 1,
+                             nperseg = 256L)
+
+res_plv <- couplingAnalysis(pe_eeg, pe_emg,
+                             method = "plv",
+                             channels_x = 1, channels_y = 1,
+                             freq_band = c(18, 22))
+
+res_gc  <- couplingAnalysis(dir_data$x, dir_data$y,
+                             method = "granger",
+                             sr = 500, order = 15)
+
+# Also works directly with MultiPhysioExperiment
+res_mpe <- couplingAnalysis(mpe,
+                             modality_x = "EEG", modality_y = "EMG",
+                             method = "coherence",
+                             channels_x = 1, channels_y = 1)
+```
+
+## Multi-Channel Coupling Matrices
+
+Compute coupling between all pairs of channels across two modalities:
+
+```{r coupling-matrix}
+# Coherence matrix
+coh_mat <- coherenceMatrix(pe_eeg, pe_emg, nperseg = 128L)
+coh_mat$matrix
+
+# Generic coupling matrix (any method)
+pli_mat <- couplingMatrix(pe_eeg, pe_emg,
+                           method = "coherence",
+                           nperseg = 128L)
+
+# Visualize as heatmap
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  plotCouplingMatrix(coh_mat$matrix, title = "EEG-EMG Coherence")
+}
+```
+
+## Statistical Significance Testing
+
+### Surrogate Testing
+
+Test whether observed coupling exceeds what would be expected by chance,
+using phase-randomized or time-shifted surrogates:
+
+```{r surrogate-test}
+sig_test <- surrogateTest(pe_eeg, pe_emg,
+                           method = "coherence",
+                           channels_x = 1, channels_y = 1,
+                           n_surrogates = 199,
+                           surrogate_type = "phase",
+                           nperseg = 128L)
+cat("Observed statistic:", round(sig_test$statistic, 3), "\n")
+cat("p-value:", round(sig_test$p_value, 4), "\n")
+cat("95th percentile threshold:", round(sig_test$threshold_95, 3), "\n")
+```
+
+### Bootstrap Confidence Intervals
+
+Estimate the precision of the coupling statistic using block bootstrap:
+
+```{r bootstrap-ci}
+boot <- bootstrapCI(pe_eeg, pe_emg,
+                     method = "coherence",
+                     channels_x = 1, channels_y = 1,
+                     n_boot = 199,
+                     ci = 0.95,
+                     nperseg = 128L)
+cat("Observed:", round(boot$statistic, 3), "\n")
+cat("95% CI: [", round(boot$ci_lower, 3), ",",
+    round(boot$ci_upper, 3), "]\n")
+```
+
+### Matrix-Level Significance with Multiple Comparison Correction
+
+Test significance for every channel pair simultaneously, with FDR or
+Bonferroni correction:
+
+```{r surrogate-matrix}
+mat_test <- surrogateMatrixTest(pe_eeg, pe_emg,
+                                 method = "coherence",
+                                 n_surrogates = 99,
+                                 correction = "fdr",
+                                 alpha = 0.05,
+                                 nperseg = 128L)
+mat_test$significant   # Logical matrix: which pairs are significant
+mat_test$p_adjusted    # FDR-corrected p-values
+```
+
+## Complete Workflow Example
+
+Putting it all together -- a minimal script for analyzing EEG-EMG
+corticomuscular coherence:
+
+```{r workflow}
+library(PhysioCrossModal)
+
+# 1. Create or load data
+data <- make_eeg_emg(n_sec = 10, sr_eeg = 500, sr_emg = 1000)
+
+# 2. Wrap into MultiPhysioExperiment
+mpe <- MultiPhysioExperiment(EEG = data$eeg, EMG = data$emg)
+
+# 3. Compute coherence matrix
+coh_mat <- coherenceMatrix(mpe,
+                            modality_x = "EEG", modality_y = "EMG",
+                            nperseg = 256L,
+                            freq_range = c(15, 25))
+
+# 4. Test significance with FDR correction
+sig <- surrogateMatrixTest(mpe,
+                            modality_x = "EEG", modality_y = "EMG",
+                            method = "coherence",
+                            n_surrogates = 199,
+                            correction = "fdr",
+                            nperseg = 256L,
+                            freq_range = c(15, 25))
+
+# 5. Visualize
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  plotCouplingMatrix(sig$matrix, title = "CMC (15-25 Hz)")
+}
+
+# 6. Detailed spectrum for the most coupled pair
+best <- which(sig$matrix == max(sig$matrix, na.rm = TRUE), arr.ind = TRUE)
+coh_detail <- coherence(mpe,
+                         modality_x = "EEG", modality_y = "EMG",
+                         channels_x = best[1, 1],
+                         channels_y = best[1, 2])
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  plotCoherenceSpectrum(coh_detail)
+}
+```
+
+## Session Information
+
+```{r session-info}
+sessionInfo()
+```
