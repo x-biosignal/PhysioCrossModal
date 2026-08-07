@@ -1,0 +1,118 @@
+url: https://x-biosignal.github.io/PhysioCrossModal/
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#2c3e50"
+navbar:
+  structure:
+    left: [reference, articles]
+    right: [ecosystem, search, github]
+  components:
+    ecosystem:
+      text: Ecosystem
+      menu:
+        - text: PhysioCore
+          href: https://x-biosignal.github.io/PhysioCore/
+        - text: PhysioIO
+          href: https://x-biosignal.github.io/PhysioIO/
+        - text: PhysioPreprocess
+          href: https://x-biosignal.github.io/PhysioPreprocess/
+        - text: PhysioAnalysis
+          href: https://x-biosignal.github.io/PhysioAnalysis/
+        - text: PhysioEEG
+          href: https://x-biosignal.github.io/PhysioEEG/
+        - text: PhysioECG
+          href: https://x-biosignal.github.io/PhysioECG/
+        - text: PhysioEMG
+          href: https://x-biosignal.github.io/PhysioEMG/
+        - text: PhysioEDA
+          href: https://x-biosignal.github.io/PhysioEDA/
+        - text: PhysioMoCap
+          href: https://x-biosignal.github.io/PhysioMoCap/
+        - text: PhysioCrossModal
+          href: https://x-biosignal.github.io/PhysioCrossModal/
+        - text: PhysioMSKNet
+          href: https://x-biosignal.github.io/PhysioMSKNet/
+        - text: PhysioOpenSim
+          href: https://x-biosignal.github.io/PhysioOpenSim/
+        - text: PhysioAnnotationHub
+          href: https://x-biosignal.github.io/PhysioAnnotationHub/
+        - text: PhysioClinical
+          href: https://x-biosignal.github.io/PhysioClinical/
+        - text: PhysioClinStats
+          href: https://x-biosignal.github.io/PhysioClinStats/
+        - text: PhysioReport
+          href: https://x-biosignal.github.io/PhysioReport/
+    github:
+      icon: fa-github
+      href: https://github.com/x-biosignal/PhysioCrossModal
+reference:
+  - title: Class & accessors
+    desc: The MultiPhysioExperiment container, its constructor, accessors, and S4 methods.
+    contents:
+    - MultiPhysioExperiment-class
+    - MultiPhysioExperiment
+    - experiments
+    - modalities
+    - nModalities
+    - samplingRates
+    - alignment
+    - mergePhysio
+    - "[,MultiPhysioExperiment,ANY,ANY,ANY-method"
+    - "[[,MultiPhysioExperiment,ANY,ANY-method"
+    - "length,MultiPhysioExperiment-method"
+    - "names,MultiPhysioExperiment-method"
+    - "show,MultiPhysioExperiment-method"
+  - title: Cross-modal coupling analysis
+    desc: High-level coupling workflows and result accessors.
+    contents:
+    - couplingAnalysis
+    - couplingAnalysisCached
+    - couplingMatrix
+    - couplingResults
+  - title: Connectivity & coupling measures
+    desc: Pairwise connectivity, coherence, and phase/amplitude coupling estimators.
+    contents:
+    - coherence
+    - coherenceMatrix
+    - crossCorrelation
+    - crossSpectrum
+    - slidingCrossCorrelation
+    - grangerCausality
+    - phaseLagIndex
+    - phaseLockingValue
+    - weightedPLI
+    - multitaperCoherence
+    - waveletCoherence
+    - waveletPLV
+  - title: Signal alignment
+    desc: Temporal alignment and resampling across modalities.
+    contents:
+    - alignSignals
+    - alignToRate
+  - title: Statistics
+    desc: Surrogate testing, bootstrap confidence intervals, and generalization.
+    contents:
+    - bootstrapCI
+    - surrogateTest
+    - surrogateMatrixTest
+    - lodoGeneralization
+  - title: Visualization
+    desc: Plotting functions for coupling and coherence results.
+    contents:
+    - plotCoherenceSpectrum
+    - plotCouplingMatrix
+    - plotCouplingTimecourse
+    - plotWaveletCoherence
+  - title: Test data generators
+    desc: Synthetic signal generators for examples and tests.
+    contents:
+    - make_coupled_signals
+    - make_directed_signals
+    - make_eeg_emg
+articles:
+  - title: Articles
+    navbar: ~
+    contents:
+    - introduction
+    - coupling-analysis
