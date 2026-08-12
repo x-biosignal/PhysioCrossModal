@@ -1,0 +1,56 @@
+# Elastic (Karcher) mean of a set of curves
+
+Computes the elastic template mean of repeated curves by iteratively
+aligning every curve to the current mean and averaging the aligned
+curves. Because the phase variability is removed before averaging, peaks
+are preserved rather than blurred out (unlike a naive cross-curve mean).
+
+## Usage
+
+``` r
+srvfMean(curves, t = NULL, iterations = 5L, max_step = 6L, use_fdasrvf = NA)
+```
+
+## Arguments
+
+- curves:
+
+  A list of numeric curves of the same length, or a matrix whose columns
+  are curves.
+
+- t:
+
+  Optional grid (defaults to 0..1).
+
+- iterations:
+
+  Number of refinement iterations (default: 5).
+
+- max_step:
+
+  Maximum DP step for the pure-R solver (default: 6).
+
+- use_fdasrvf:
+
+  As in
+  [`elasticAlign()`](https://x-biosignal.github.io/PhysioCrossModal/reference/elasticAlign.md).
+
+## Value
+
+A list with the elastic `mean` curve, the `warpings` (a matrix, one
+column per curve), and the `aligned` curves.
+
+## See also
+
+[`elasticAlign()`](https://x-biosignal.github.io/PhysioCrossModal/reference/elasticAlign.md)
+
+## Examples
+
+``` r
+t <- seq(0, 1, length.out = 80)
+curves <- lapply(c(-0.1, 0, 0.1), function(s)
+  exp(-((t - (0.5 + s))^2) / (2 * 0.05^2)))
+m <- srvfMean(curves)
+max(m$mean)
+#> [1] 0.991812
+```
