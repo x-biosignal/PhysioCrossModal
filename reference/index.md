@@ -15,6 +15,8 @@
   : Get or set temporal alignment metadata
 - [`bootstrapCI()`](https://x-biosignal.github.io/PhysioCrossModal/reference/bootstrapCI.md)
   : Bootstrap confidence interval for coupling
+- [`ciPLV()`](https://x-biosignal.github.io/PhysioCrossModal/reference/ciPLV.md)
+  : Corrected imaginary phase-locking value (ciPLV)
 - [`coherence()`](https://x-biosignal.github.io/PhysioCrossModal/reference/coherence.md)
   : Magnitude-squared coherence between two signals
 - [`coherenceMatrix()`](https://x-biosignal.github.io/PhysioCrossModal/reference/coherenceMatrix.md)
@@ -45,6 +47,8 @@
   : Granger Causality Between Two Signals
 - [`laggedCoherence()`](https://x-biosignal.github.io/PhysioCrossModal/reference/laggedCoherence.md)
   : Lagged coherence between two signals
+- [`leidaStates()`](https://x-biosignal.github.io/PhysioCrossModal/reference/leidaStates.md)
+  : LEiDA dynamic functional-connectivity states
 - [`length(`*`<MultiPhysioExperiment>`*`)`](https://x-biosignal.github.io/PhysioCrossModal/reference/length-MultiPhysioExperiment-method.md)
   : Additional methods for MultiPhysioExperiment
 - [`lodoGeneralization()`](https://x-biosignal.github.io/PhysioCrossModal/reference/lodoGeneralization.md)
@@ -67,6 +71,10 @@
   : Get number of modalities
 - [`names(`*`<MultiPhysioExperiment>`*`)`](https://x-biosignal.github.io/PhysioCrossModal/reference/names-MultiPhysioExperiment-method.md)
   : Names of a MultiPhysioExperiment
+- [`orthogonalizedAEC()`](https://x-biosignal.github.io/PhysioCrossModal/reference/orthogonalizedAEC.md)
+  : Orthogonalised amplitude-envelope correlation (leakage-corrected)
+- [`pairwisePhaseConsistency()`](https://x-biosignal.github.io/PhysioCrossModal/reference/pairwisePhaseConsistency.md)
+  : Pairwise phase consistency (PPC)
 - [`partialDirectedCoherence()`](https://x-biosignal.github.io/PhysioCrossModal/reference/partialDirectedCoherence.md)
   : Partial Directed Coherence for multichannel / multimodal signals
 - [`phaseAmplitudeCoupling()`](https://x-biosignal.github.io/PhysioCrossModal/reference/phaseAmplitudeCoupling.md)
@@ -75,6 +83,8 @@
   : Phase Lag Index (PLI)
 - [`phaseLockingValue()`](https://x-biosignal.github.io/PhysioCrossModal/reference/phaseLockingValue.md)
   : Phase Locking Value (PLV)
+- [`phaseSlopeIndex()`](https://x-biosignal.github.io/PhysioCrossModal/reference/phaseSlopeIndex.md)
+  : Phase Slope Index (directed, volume-conduction robust)
 - [`plotCoherenceSpectrum()`](https://x-biosignal.github.io/PhysioCrossModal/reference/plotCoherenceSpectrum.md)
   : Plot coherence spectrum
 - [`plotComodulogram()`](https://x-biosignal.github.io/PhysioCrossModal/reference/plotComodulogram.md)

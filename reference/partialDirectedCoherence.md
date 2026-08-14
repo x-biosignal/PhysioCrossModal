@@ -3,7 +3,7 @@
 Frequency-resolved directed connectivity via Partial Directed Coherence
 (Baccala & Sameshima 2001), computed from the coefficient matrix of an
 MVAR model
-([`PhysioCore::mvarFit()`](https://x-biosignal.r-universe.dev/PhysioCore/reference/mvarFit.html));
+([`PhysioCore::mvarFit()`](https://x-biosignal.github.io/PhysioCore//reference/mvarFit.html));
 numerically identical to `PhysioEEG`'s `eegPDC`. Unlike DTF, PDC
 reflects only direct influences, so a purely indirect pathway gives PDC
 near zero.

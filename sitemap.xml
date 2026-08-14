@@ -15,6 +15,7 @@
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/alignToRate.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/alignment.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/bootstrapCI.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/ciPLV.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/coherence.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/coherenceMatrix.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/comodulogram.html</loc></url>
@@ -32,6 +33,7 @@
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/grangerCausality.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/index.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/laggedCoherence.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/leidaStates.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/length-MultiPhysioExperiment-method.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/lodoGeneralization.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/make_coupled_signals.html</loc></url>
@@ -43,10 +45,13 @@
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/multitaperCoherence.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/nModalities.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/names-MultiPhysioExperiment-method.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/orthogonalizedAEC.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/pairwisePhaseConsistency.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/partialDirectedCoherence.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/phaseAmplitudeCoupling.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/phaseLagIndex.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/phaseLockingValue.html</loc></url>
+<url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/phaseSlopeIndex.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/plotCoherenceSpectrum.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/plotComodulogram.html</loc></url>
 <url><loc>https://x-biosignal.github.io/PhysioCrossModal/reference/plotCouplingMatrix.html</loc></url>

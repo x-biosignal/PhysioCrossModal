@@ -3,7 +3,7 @@
 Frequency-resolved directed connectivity via the Directed Transfer
 Function (Kaminski & Blinowska 1991), computed from the transfer
 function of a multivariate autoregressive model fitted with
-[`PhysioCore::mvarFit()`](https://x-biosignal.r-universe.dev/PhysioCore/reference/mvarFit.html).
+[`PhysioCore::mvarFit()`](https://x-biosignal.github.io/PhysioCore//reference/mvarFit.html).
 This cross-modal implementation is numerically identical to
 `PhysioEEG`'s `eegDTF` on the same input. Because the transfer function
 inverts the whole VAR system, DTF reflects both direct and indirect

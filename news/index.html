@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">PhysioCrossModal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,21 @@
       <small>Source: <a href="https://github.com/x-biosignal/PhysioCrossModal/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.2" id="physiocrossmodal-062">PhysioCrossModal 0.6.2<a class="anchor" aria-label="anchor" href="#physiocrossmodal-062"></a></h2>
+<ul><li>New frontier connectivity measures (<code>R/coupling-frontier.R</code>):
+<ul><li>
+<code><a href="../reference/phaseSlopeIndex.html">phaseSlopeIndex()</a></code> — directed, volume-conduction-robust flow direction (Nolte et al. 2008); positive means the first signal leads.</li>
+<li>
+<code><a href="../reference/orthogonalizedAEC.html">orthogonalizedAEC()</a></code> — leakage-corrected amplitude-envelope correlation (Hipp et al. 2012; Brookes et al. 2012).</li>
+<li>
+<code><a href="../reference/ciPLV.html">ciPLV()</a></code> — corrected imaginary phase-locking value (Bruna et al. 2018).</li>
+<li>
+<code><a href="../reference/pairwisePhaseConsistency.html">pairwisePhaseConsistency()</a></code> — bias-free phase synchrony (Vinck et al. 2010).</li>
+<li>
+<code><a href="../reference/leidaStates.html">leidaStates()</a></code> — LEiDA dynamic functional-connectivity states (Cabral et al. 2017).</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.1" id="physiocrossmodal-061">PhysioCrossModal 0.6.1<a class="anchor" aria-label="anchor" href="#physiocrossmodal-061"></a></h2>
 <ul><li>Fixed <code><a href="../reference/elasticAlign.html">elasticAlign()</a></code> / <code><a href="../reference/srvfMean.html">srvfMean()</a></code> under <code>fdasrvf</code> &gt;= 2.x: the aligned function is now read from <code>fit$f2tilde</code> (renamed from <code>f2n</code> upstream), with a fallback to <code>f2n</code> for older <code>fdasrvf</code>. Previously the aligned curve came back empty on newer <code>fdasrvf</code>, breaking the elastic mean’s length invariant (this surfaced only when <code>fdasrvf</code> was installed, e.g. on r-universe binary builds).</li>

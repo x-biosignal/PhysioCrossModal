@@ -1,5 +1,21 @@
 # Changelog
 
+## PhysioCrossModal 0.6.2
+
+- New frontier connectivity measures (`R/coupling-frontier.R`):
+  - [`phaseSlopeIndex()`](https://x-biosignal.github.io/PhysioCrossModal/reference/phaseSlopeIndex.md)
+    — directed, volume-conduction-robust flow direction (Nolte et
+    al. 2008); positive means the first signal leads.
+  - [`orthogonalizedAEC()`](https://x-biosignal.github.io/PhysioCrossModal/reference/orthogonalizedAEC.md)
+    — leakage-corrected amplitude-envelope correlation (Hipp et
+    al. 2012; Brookes et al. 2012).
+  - [`ciPLV()`](https://x-biosignal.github.io/PhysioCrossModal/reference/ciPLV.md)
+    — corrected imaginary phase-locking value (Bruna et al. 2018).
+  - [`pairwisePhaseConsistency()`](https://x-biosignal.github.io/PhysioCrossModal/reference/pairwisePhaseConsistency.md)
+    — bias-free phase synchrony (Vinck et al. 2010).
+  - [`leidaStates()`](https://x-biosignal.github.io/PhysioCrossModal/reference/leidaStates.md)
+    — LEiDA dynamic functional-connectivity states (Cabral et al. 2017).
+
 ## PhysioCrossModal 0.6.1
 
 - Fixed

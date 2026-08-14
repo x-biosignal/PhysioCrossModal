@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   coupling-analysis: coupling-analysis.html
   introduction: introduction.html
-last_built: 2026-08-12T14:57Z
+last_built: 2026-08-14T00:15Z
 urls:
   reference: https://x-biosignal.github.io/PhysioCrossModal/reference
   article: https://x-biosignal.github.io/PhysioCrossModal/articles
