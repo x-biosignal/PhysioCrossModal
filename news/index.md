@@ -1,5 +1,12 @@
 # Changelog
 
+## PhysioCrossModal 0.6.4
+
+- [`leidaTransitions()`](https://x-biosignal.github.io/PhysioCrossModal/reference/leidaTransitions.md)
+  — LEiDA state-transition metrics: the Markov transition matrix between
+  connectivity states, switching rate, fractional occupancy, mean dwell
+  time, and occupancy-weighted transition entropy.
+
 ## PhysioCrossModal 0.6.3
 
 - [`crossWaveletTransform()`](https://x-biosignal.github.io/PhysioCrossModal/reference/crossWaveletTransform.md)

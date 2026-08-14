@@ -51,6 +51,8 @@
   : Lagged coherence between two signals
 - [`leidaStates()`](https://x-biosignal.github.io/PhysioCrossModal/reference/leidaStates.md)
   : LEiDA dynamic functional-connectivity states
+- [`leidaTransitions()`](https://x-biosignal.github.io/PhysioCrossModal/reference/leidaTransitions.md)
+  : LEiDA state-transition metrics
 - [`length(`*`<MultiPhysioExperiment>`*`)`](https://x-biosignal.github.io/PhysioCrossModal/reference/length-MultiPhysioExperiment-method.md)
   : Additional methods for MultiPhysioExperiment
 - [`lodoGeneralization()`](https://x-biosignal.github.io/PhysioCrossModal/reference/lodoGeneralization.md)
