@@ -36,6 +36,8 @@
   : Cross-correlation between two signals
 - [`crossSpectrum()`](https://x-biosignal.github.io/PhysioCrossModal/reference/crossSpectrum.md)
   : Cross-spectral density between two signals
+- [`crossWaveletTransform()`](https://x-biosignal.github.io/PhysioCrossModal/reference/crossWaveletTransform.md)
+  : Cross-wavelet transform (XWT) with red-noise significance
 - [`directedTransferFunction()`](https://x-biosignal.github.io/PhysioCrossModal/reference/directedTransferFunction.md)
   : Directed Transfer Function for multichannel / multimodal signals
 - [`elasticAlign()`](https://x-biosignal.github.io/PhysioCrossModal/reference/elasticAlign.md)

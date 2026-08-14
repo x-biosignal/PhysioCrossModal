@@ -1,5 +1,13 @@
 # Changelog
 
+## PhysioCrossModal 0.6.3
+
+- [`crossWaveletTransform()`](https://x-biosignal.github.io/PhysioCrossModal/reference/crossWaveletTransform.md)
+  — standalone cross-wavelet transform (XWT) with time-frequency common
+  power, phase lead/lag, cone of influence, and AR(1) red-noise
+  significance by Monte-Carlo surrogates (Torrence & Compo 1998;
+  Grinsted et al. 2004).
+
 ## PhysioCrossModal 0.6.2
 
 - New frontier connectivity measures (`R/coupling-frontier.R`):
