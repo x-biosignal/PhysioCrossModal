@@ -1,0 +1,10 @@
+"gate","value","threshold","pass"
+"fixture_hashes",1,"== 1",TRUE
+"external_formula_max_abs_error",3.33066907387547e-16,"<= 1e-12",TRUE
+"independent_formula_max_abs_error",2.77555756156289e-17,"<= 1e-12",TRUE
+"public_grid_max_abs_error",5.55111512312578e-17,"<= 1e-10",TRUE
+"coupled_adjusted_sensitivity",1,">= 0.80",TRUE
+"uncoupled_adjusted_cell_fpr",0.005,"<= 0.10",TRUE
+"scale_invariance_max_error",8.88178419700125e-16,"<= 1e-12",TRUE
+"rng_restored",1,"== 1",TRUE
+"mutation_detection",7,"== 7",TRUE

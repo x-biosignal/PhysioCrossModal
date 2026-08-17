@@ -1,0 +1,171 @@
+---
+title: "Integrating Modalities: Multi-Modal Fusion with PhysioCrossModal"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Integrating Modalities: Multi-Modal Fusion with PhysioCrossModal}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+## The integration problem
+
+Movement is measured in many modalities — joint **kinematics**, **kinetics**
+(forces), **EMG**, **IMU** — and the scientifically interesting question is usually
+not any one of them but *what they share*. `PhysioCrossModal` provides a family of
+**multi-modal fusion** methods that take several time-aligned modality blocks and
+answer complementary questions:
+
+* what is **shared across** all modalities vs **specific to** each? — `jive()`,
+  `multipleFactorAnalysis()`
+* which **directions co-vary** between two modalities? — `cca()`, `plsBlocks()`
+* is there a **common latent drive**? — `coupledNMF()`
+* how related are the modalities **as a whole**? — `rvCoefficient()`,
+  `distanceCorrelation()`, `representationalSimilarity()`
+* one composite **index** / design matrix / latent model — `multimodalGaitIndex()`,
+  `fuseBlocks()`, `crossBlockFactor()`
+
+Every method takes a list of matrices that **share the observation dimension**
+(rows = the same subjects, or gait-cycle points, or time samples), with each
+modality contributing its own columns (features).
+
+```{r data}
+library(PhysioCrossModal)
+
+# two aligned modality blocks: rows = the same 200 observations (e.g. subjects),
+# columns = each modality's features
+kinematics <- matrix(rnorm(200 * 12), 200, 12)   # e.g. joint-angle features
+kinetics   <- matrix(rnorm(200 *  8), 200,  8)   # e.g. ground-reaction-force features
+```
+
+## Shared vs modality-specific: JIVE
+
+**JIVE** (Joint and Individual Variation Explained) splits each block into a
+low-rank **joint** structure common to *all* modalities, low-rank **individual**
+structure specific to each, and residual. The joint scores are the *integrated
+representation*; the variance table tells you how much of each modality is shared.
+
+```{r jive}
+fit <- jive(list(kinematics = kinematics, kinetics = kinetics),
+            rank_joint = 2, rank_individual = 2)
+
+fit$variance          # joint / individual / residual fraction per modality
+fit$joint_scores      # the shared component scores (integrated representation)
+
+# relate the shared component to an outcome (e.g. walking speed):
+# cor(fit$joint_scores[, 1], speed)
+```
+
+**Multiple Factor Analysis** is a block-balanced global PCA — each block is scaled
+so a large or high-variance modality cannot dominate the shared factors.
+
+```{r mfa}
+mfa <- multipleFactorAnalysis(list(kinematics, kinetics), ncomp = 3)
+mfa$explained         # variance per global factor
+mfa$contributions     # each block's contribution to each factor
+```
+
+## Covarying directions: CCA and PLS
+
+**Canonical correlation** finds the linear combinations of two modalities whose
+scores are maximally *correlated* (auto-regularised when features exceed
+observations); **two-block PLS** maximises *covariance* instead, and is robust in
+high dimensions.
+
+```{r cca}
+cc <- cca(kinematics, kinetics)
+cc$cor                # canonical correlations (decreasing)
+cc$xscores; cc$yscores
+
+pl <- plsBlocks(kinematics, kinetics, ncomp = 2)
+pl$correlation        # score correlation per component
+```
+
+## A common latent drive: coupled NMF
+
+When two **non-negative** modalities share a latent drive (e.g. EMG envelopes and a
+kinematic-speed envelope driven by the same temporal command), `coupledNMF()`
+estimates one shared factor `W` with modality-specific loadings.
+
+```{r coupled}
+emg    <- abs(matrix(rnorm(200 * 6), 200, 6))   # non-negative
+imu    <- abs(matrix(rnorm(200 * 4), 200, 4))
+cn <- coupledNMF(emg, imu, rank = 2)
+cn$shared             # W: the common drive
+cn$vaf_x; cn$vaf_y    # fit per modality
+```
+
+## Whole-block association
+
+`rvCoefficient()` is a multivariate correlation between two blocks;
+`distanceCorrelation()` also captures **non-linear** dependence (zero iff
+independent); `representationalSimilarity()` compares each modality's *geometry of
+observations* (RSA). All offer permutation p-values.
+
+```{r assoc}
+rvCoefficient(kinematics, kinetics, permutations = 1000)$rv
+distanceCorrelation(kinematics, kinetics, permutations = 1000)$dcor
+representationalSimilarity(list(kin = kinematics, kinet = kinetics))$similarity
+```
+
+A low RV with a high canonical correlation means the coupling is real but
+*low-dimensional* — read several lenses together.
+
+## One index, one matrix, one latent model
+
+A **composite multi-modal gait index** (Gait-Deviation-Index style, but spanning
+modalities) scores how far a subject's multi-modal feature vector lies from a
+normative reference, with a per-modality breakdown:
+
+```{r index}
+reference <- matrix(rnorm(300 * 20), 300, 20)     # controls
+subjects  <- matrix(rnorm(10 * 20), 10, 20)
+blocks    <- list(kinematics = 1:8, kinetics = 9:14, emg = 15:20)
+idx <- multimodalGaitIndex(subjects, reference, blocks = blocks)
+idx$index          # ~100 = typical; lower = more deviant
+idx$by_modality    # which modality drives each subject's deviation
+```
+
+`fuseBlocks()` produces a single block-balanced design matrix for downstream
+multi-view machine learning, and `crossBlockFactor()` fits a common-factor model
+that flags which latent factors are **shared across modalities** vs
+modality-specific.
+
+```{r fuse}
+fused <- fuseBlocks(list(kinematics, kinetics), method = "mfa")$matrix
+cf <- crossBlockFactor(list(kinematics, kinetics), nfactors = 2)
+cf$shared          # TRUE for factors that load on >= 2 modalities
+```
+
+## Choosing a method
+
+| question | method |
+|---|---|
+| what is shared vs modality-specific? | `jive()` |
+| block-balanced shared factors | `multipleFactorAnalysis()` |
+| which directions co-vary? (correlation / covariance) | `cca()` / `plsBlocks()` |
+| a common non-negative drive | `coupledNMF()` |
+| whole-block association (linear / non-linear / geometry) | `rvCoefficient()` / `distanceCorrelation()` / `representationalSimilarity()` |
+| one composite deviation score | `multimodalGaitIndex()` |
+| feature-level fusion for ML | `fuseBlocks()` |
+| shared vs specific latent factors | `crossBlockFactor()` |
+
+## Correctness
+
+These methods are **cross-validated against independent, established
+implementations** — `cca()` vs base `cancor`, `distanceCorrelation()` vs
+`energy::dcor`, `rvCoefficient()` vs `FactoMineR::coeffRV`,
+`multipleFactorAnalysis()` vs `FactoMineR::MFA`, `representationalSimilarity()` vs
+`vegan::mantel`, `crossBlockFactor()` vs `stats::factanal`, and `jive()` against its
+exact algebraic identity — agreeing to machine precision (see
+`planning/crossmodal-validation/` in the development monorepo), in addition to the
+packaged unit tests.
+
+## See also
+
+* `vignette("coupling-analysis", package = "PhysioCrossModal")` — pairwise
+  cross-modal coupling (coherence, phase, PAC, Granger).
+* The `MultiPhysioExperiment` container for storing and aligning modalities.

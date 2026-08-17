@@ -1,0 +1,15 @@
+Fixture-ID: ws9-16-tensorpac-formulas
+WP-ID: WS9-16
+Reference-Tool: Tensorpac
+Reference-Version: 0.6.5
+Reference-URL: https://etiennecmb.github.io/tensorpac/
+Generator: generate-ws9-16-tensorpac.py
+Generator-SHA256: 6c35ed1af177bf864155ccc14358aa645d4ad3878ca9096fb91dd0b4e69cc897
+Input-SHA256: 3aa02fd1316cb50eb717f076e76bfab532ab96e55609e47c93a57a4d822e94d4
+Expected-SHA256: 637ac4cbdf63df38829be919c54a5b3d85f29484bdbb4c97eb86b84e62889bea
+Runtime: CPython 3.14; NumPy 2.5.1
+Seed: deterministic closed-form input; no RNG
+Direction-Convention: phase first, amplitude second; upper-tail PAC
+Generated-UTC: 2026-07-29T00:00:00Z
+License-Note: numeric outputs only; Tensorpac source is not copied; Tensorpac is BSD-3-Clause
+Ozkurt-Note: Tensorpac norm_direct_pac uses a different normalization; the Ozkurt fixture uses the published package formula in independent NumPy

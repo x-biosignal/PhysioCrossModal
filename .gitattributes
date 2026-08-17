@@ -1,0 +1,7 @@
+# Pinned validation fixtures are hashed byte-for-byte (SHA256SUMS). Keep every
+# hashed file free of end-of-line normalization so the checksums stay stable
+# across platforms (notably Windows CRLF checkout, which otherwise breaks the
+# digest). SHA256SUMS covers both the fixtures/ payload and the generator
+# script one level up, so both are pinned here.
+inst/validation/fixtures/** -text
+inst/validation/generate-ws9-16-tensorpac.py -text
