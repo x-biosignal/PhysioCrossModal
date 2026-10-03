@@ -1,0 +1,27 @@
+#' Methods on the multimodal container
+#'
+#' \code{length()}, \code{names()}, \code{[} and \code{[[} for the multimodal
+#' container are defined once, in \pkg{PhysioExperiment}, and are imported from
+#' there. They are not redefined here: two definitions of the
+#' same method on the same class is exactly the divergence this package's own
+#' container was unified away to prevent.
+#'
+#' One behaviour changed in the move, deliberately. The \code{[} defined here
+#' selected a time window by computing \code{floor(t * rate) + 1} from each
+#' modality's sampling rate alone. That ignored each stream's start offset on
+#' the shared clock, so a window taken from modalities that did not start
+#' together returned mismatched spans; it also rebuilt the alignment table from
+#' defaults, resetting every offset to zero, and discarded the sample map.
+#' Selection is now made on each sample's actual time, the clock is preserved,
+#' and each stream's offset is updated to its first retained sample. For windows
+#' whose bounds land on sample times - including all simultaneously started data
+#' with grid-aligned bounds - the selection is unchanged.
+#'
+#' The cache accessors \code{\link{couplingResults}()} and
+#' \code{couplingResults<-} are defined in \code{coupling-wrapper.R}, where the
+#' cache itself lives.
+#'
+#' @name MultiPhysioExperiment-crossmodal-methods
+#' @seealso \code{\link[PhysioExperiment]{timeWindow}},
+#'   \code{\link[PhysioExperiment]{MultiPhysioExperiment}}
+NULL

@@ -1,0 +1,4 @@
+metric,value,reference
+tort,0.012527650074589891,tensorpac.methods.modulation_index
+canolty,0.20005596125137201,tensorpac.methods.mean_vector_length
+ozkurt,0.17101525155676223,published_formula_independent_numpy

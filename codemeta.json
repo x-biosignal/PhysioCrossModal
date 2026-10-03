@@ -1,0 +1,40 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "PhysioCrossModal",
+  "name": "PhysioCrossModal: Cross-Modal Coupling Analysis for PhysioExperiment Objects",
+  "version": "0.4.0",
+  "description": "Provides cross-modal coupling, connectivity, and synchrony analysis between physiological signals of different modalities (EEG, EMG, ECG, EDA, MoCap, fNIRS, etc.). Introduces a MultiPhysioExperiment container class for holding multiple PhysioExperiment objects at different sampling rates with temporal alignment. Includes spectral coherence, phase synchrony (PLV, PLI, wPLI), directed coupling (Granger causality), and time-domain coupling (cross-correlation) methods.",
+  "license": "https://spdx.org/licenses/MIT",
+  "codeRepository": "https://github.com/x-biosignal/PhysioCrossModal",
+  "issueTracker": "https://github.com/x-biosignal/PhysioCrossModal/issues",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R"
+  },
+  "runtimePlatform": "R",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Yusuke",
+      "familyName": "Matsui",
+      "email": "mail.to.matsui@gmail.com"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Yusuke",
+      "familyName": "Matsui",
+      "email": "mail.to.matsui@gmail.com"
+    }
+  ],
+  "developmentStatus": "active",
+  "keywords": [
+    "physiological-signals",
+    "rehabilitation",
+    "biosignal",
+    "biomechanics",
+    "R"
+  ]
+}
